@@ -1,6 +1,6 @@
 # agentmail
 
-> CLI email client for AI agents. Read, search, send, and manage email — all from the command line with JSON output.
+> CLI email client for AI agents. Read, search, send, and manage email from the command line with JSON output.
 
 ```
 $ agentmail emails search "stepfun"   # 15ms across 34K emails
