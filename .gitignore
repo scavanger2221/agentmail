@@ -1,0 +1,25 @@
+# Binaries
+agentmail
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+
+# Dependency directories
+vendor/
+
+# IDE
+.idea/
+.vscode/
+
+# Cache
+*.db
+*.db-shm
+*.db-wal
