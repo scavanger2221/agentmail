@@ -181,3 +181,7 @@ PRs welcome. `make build` to compile, `make test` to run tests.
 ## License
 
 MIT
+
+## Acknowledgements
+
+Built with [go-imap](https://github.com/emersion/go-imap) and [go-smtp](https://github.com/emersion/go-smtp) by emersion, [cobra](https://github.com/spf13/cobra) by spf13, and [go-sqlite3](https://github.com/mattn/go-sqlite3) by mattn.
