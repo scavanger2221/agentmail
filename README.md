@@ -1,12 +1,14 @@
 # agentmail
 
-> Agent-first CLI email client. Built for AI agents — JSON output, SQLite cache, FTS5 search.
+> CLI email client for AI agents. Read, search, send, and manage email — all from the command line with JSON output.
 
 ```
 $ agentmail emails search "stepfun"   # 15ms across 34K emails
 $ agentmail emails send               # pipe JSON, it sends
 $ echo '{"to":["bob@example.com"],"subject":"yo","body":"hi"}' | agentmail emails send
 ```
+
+agentmail is a terminal email client designed to be consumed by programs, not humans. Every command outputs structured JSON that AI agents and scripts can parse easily. It caches emails locally in SQLite with FTS5 full-text search for instant querying, and syncs with Gmail/Outlook via IMAP + SMTP.
 
 ## Install
 
