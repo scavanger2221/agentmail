@@ -16,13 +16,16 @@ cd agentmail
 make install PREFIX=$HOME/.local
 ```
 
-Requires Go & gcc. For programmatic agent install:
+Requires Go & gcc. For agent setup, paste this prompt:
 
-```bash
-git clone https://github.com/scavanger2221/agentmail.git /tmp/agentmail
-cd /tmp/agentmail
-make install PREFIX=$HOME/.local
-export PATH="$HOME/.local/bin:$PATH"
+```
+Install & configure agentmail from https://github.com/scavanger2221/agentmail.
+1. clone + cd + make install PREFIX=$HOME/.local
+2. get the user's Gmail address and app password (check existing configs or ask)
+3. write config.toml to ~/.config/agentmail/ with their email, imap.gmail.com:993, smtp.gmail.com:587, auth_method=password, password_file=~/.config/agentmail/gmail-pass
+4. write the app password to that file, chmod 600
+5. agentmail accounts add gmail && agentmail sync --bg
+6. verify: cache status, emails list --limit 3
 ```
 
 ## Quick Start (Gmail)
