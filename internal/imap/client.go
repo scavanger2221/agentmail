@@ -380,6 +380,7 @@ func extractPlainText(body string) string {
 }
 
 // MoveToTrash moves an email to the Trash folder.
+// The source folder must already be selected (call Select first).
 func (c *Client) MoveToTrash(uid imap.UID) error {
 	seqSet := imap.UIDSet{}
 	seqSet.AddNum(uid)
@@ -390,16 +391,72 @@ func (c *Client) MoveToTrash(uid imap.UID) error {
 		return err
 	}
 
-	// Fallback: mark as deleted and expunge
 	storeCmd := c.imap.Store(seqSet, &imap.StoreFlags{
-		Op:    imap.StoreFlagsAdd,
-		Flags: []imap.Flag{imap.FlagDeleted},
+		Op:     imap.StoreFlagsAdd,
+		Silent: true,
+		Flags:  []imap.Flag{imap.FlagDeleted},
 	}, nil)
 	if err := storeCmd.Close(); err != nil {
 		return err
 	}
 
 	return c.imap.Expunge().Close()
+}
+
+// Move moves an email from the currently selected folder to the destination folder.
+func (c *Client) Move(uid imap.UID, destFolder string) error {
+	seqSet := imap.UIDSet{}
+	seqSet.AddNum(uid)
+
+	_, err := c.imap.Move(seqSet, destFolder).Wait()
+	return err
+}
+
+// Copy copies an email from the currently selected folder to the destination folder.
+func (c *Client) Copy(uid imap.UID, destFolder string) error {
+	seqSet := imap.UIDSet{}
+	seqSet.AddNum(uid)
+
+	_, err := c.imap.Copy(seqSet, destFolder).Wait()
+	return err
+}
+
+// SetFlags adds or removes flags on a message. The folder must be selected first.
+func (c *Client) SetFlags(uid imap.UID, add bool, flags []imap.Flag) error {
+	seqSet := imap.UIDSet{}
+	seqSet.AddNum(uid)
+
+	op := imap.StoreFlagsAdd
+	if !add {
+		op = imap.StoreFlagsDel
+	}
+
+	cmd := c.imap.Store(seqSet, &imap.StoreFlags{
+		Op:     op,
+		Silent: true,
+		Flags:  flags,
+	}, nil)
+	return cmd.Close()
+}
+
+// ExpungeMessages removes messages marked as \\Deleted in the selected folder.
+func (c *Client) ExpungeMessages() error {
+	return c.imap.Expunge().Close()
+}
+
+// CreateFolder creates a new IMAP mailbox.
+func (c *Client) CreateFolder(name string) error {
+	return c.imap.Create(name, nil).Wait()
+}
+
+// DeleteFolder deletes an IMAP mailbox.
+func (c *Client) DeleteFolder(name string) error {
+	return c.imap.Delete(name).Wait()
+}
+
+// RenameFolder renames an IMAP mailbox.
+func (c *Client) RenameFolder(oldName, newName string) error {
+	return c.imap.Rename(oldName, newName, nil).Wait()
 }
 
 func findTrashFolder(c *Client) string {
